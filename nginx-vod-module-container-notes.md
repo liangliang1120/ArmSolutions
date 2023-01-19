@@ -104,6 +104,53 @@ node2 ~$ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3s_VERSION} K3S_U
  sh -
 ```
  ![image](https://user-images.githubusercontent.com/35073431/213310160-103fefc7-15a7-4113-afd6-2a790b72a8b9.png)
+7. Repeat step 3 (for the servers provisioned with SLE Micro 5.1 or later, reboot the system when the K3s installer shell script
+completes the installation). Otherwise, the cluster should be up and running.
+
+8. Execute kubectl to check the nodes’ readiness. If their status is “Ready,” a 3-node compact cluster is ready!
+```
+node1 ~$ kubectl get nodes
+```
+9. To access the k3s cluster from the bastion node, the k3s.yaml is under /etc/rancher/k3s. Replicate it under your home directory
+as ~/.kube/config.
+
+---
+https://www.youtube.com/watch?v=zSlRUMm36n8
+
+```
+apt install mysql-client -y
+SUSE use following:
+sudo zypper install mariadb-client
+```
+
+get the Endpoint of RDS:
+k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com
+
+mysql -h k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com -v -p
+
+```
+mysql -h k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com -u admin -p
+```
+admin is my name in RDS
+
+in the DB:
+```
+CREATE DATABASE k3s;
+FLUSH PRIVILEGES;
+```
+to install rancher:
+```
+export K3S_DATASTORE_ENDPOINT="mysql://admin:12345678@tcp(k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com:3306)/k3s"
+export INSTALL_K3S_EXEC=" --write-kubeconfigmode=644"
+export K3s_VERSION="v1.23.6+k3s1"
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig=home/ubuntu/.kube/config --write-kubeconfigmode=644" sh -
+```
+
+
+
+
+
+
 
 
 ## Install Nginx Ingress Controller on K3s
