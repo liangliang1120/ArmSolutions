@@ -116,7 +116,12 @@ as ~/.kube/config.
 
 ---
 https://www.youtube.com/watch?v=zSlRUMm36n8
-
+all nodes:
+```
+sudo su -
+apt-get update -y
+```
+bastion node:
 ```
 apt install mysql-client -y
 SUSE use following:
@@ -143,8 +148,44 @@ to install rancher:
 export K3S_DATASTORE_ENDPOINT="mysql://admin:12345678@tcp(k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com:3306)/k3s"
 export INSTALL_K3S_EXEC=" --write-kubeconfigmode=644"
 export K3s_VERSION="v1.23.6+k3s1"
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig=home/ubuntu/.kube/config --write-kubeconfigmode=644" sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig=home/ubuntu/.kube/config --write-kubeconfigmode=644" sh -  
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfigmode=644" sh -  
+no INSTALL_K3S_EXEC can run successful
+curl -sfL https://get.k3s.io | sh -
 ```
+
+systemctl status k3s
+sudo su -
+kubectl get pods -n kube-system
+cd /var/lib/rancher/
+![image](https://user-images.githubusercontent.com/35073431/213368011-2257a3af-d2c4-4492-b771-6da15e488ffe.png)
+
+
+bastion node:
+```
+watch kubectl get nodes
+```
+node1-3:
+```
+export K3S_URL="https://172.31.26.50:6443"
+export K3S_TOKEN="K10c032b663f09455a894c39d74f3d9429353f5c2d065d05d4906b0f5e76800fb02::server:5e985003a844ba3e25e373606f274199"
+K10c032b663f09455a894c39d74f3d9429353f5c2d065d05d4906b0f5e76800fb02::server:5e985003a844ba3e25e373606f274199
+curl -sfL https://get.k3s.io | sh -
+```
+
+![image](https://user-images.githubusercontent.com/35073431/213370711-ec140b31-bdb3-436a-a151-6742f3b91ecb.png)
+
+bastion node connect db:
+```
+mysql -h k3s-cluster-db.cfthb1kwsccb.us-west-1.rds.amazonaws.com -u admin -p
+
+use k3s;
+show tables;
+```
+
+----
+https://gelopfalcon.medium.com/k3s-ha-running-in-aws-c65f69430f04
+
 
 
 
