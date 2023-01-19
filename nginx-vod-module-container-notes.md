@@ -48,7 +48,7 @@ connect to node1, get into the folder with perm file:
  '''
  
  Refresh OpenSUSE repository from the Internet, execute:
- '''
+'''
 sudo zypper refresh
 '''
 Upgrade OpenSUSE Linux, type:
