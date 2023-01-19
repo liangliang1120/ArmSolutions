@@ -8,14 +8,14 @@ https://podman.io/getting-started/installation
 
 brew install podman
 
-'''
+```
 docker build -t ampere/nginx-vod-app .
-'''
+```
 
 or
-'''
+```
 podman build -t ampere/nginx-vod-app .
-'''
+```
 
 https://solutions.amperecomputing.com/solutions/video-services?scrollToId=solutions-page-panel-2
 
@@ -43,47 +43,47 @@ Based on the support matrix, choose K3s version 1.23.6+k3s1.
 
 
 connect to node1, get into the folder with perm file:
- '''
+ ```
  ssh -i "K3s_cluster_key.pem" ec2-user@ec2-44-198-170-10.compute-1.amazonaws.com
- '''
+ ```
  
  Refresh OpenSUSE repository from the Internet, execute:
-'''
+```
 sudo zypper refresh
-'''
+```
 Upgrade OpenSUSE Linux, type:
-'''
+```
 sudo zypper update
-'''
+```
 deploy:
- '''
+ ```
  node1 ~$ export INSTALL_K3S_EXEC="server --no-deploy traefik --cluster-init --write-kubeconfigmode=644"
 node1 ~$ export K3s_VERSION="v1.23.6+k3s1"
 node1 ~$ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3s_VERSION} INSTALL_K3S_EXEC=${INSTALL_K3S_EXEC} sh -s -
-'''
+```
 ![image](https://user-images.githubusercontent.com/35073431/213271416-a35faf16-edcf-4927-b859-5f1173ea2d6d.png)
 
 3. For the servers provisioned with SLE Micro 5.1 or later, reboot the system when the K3s installer shell script completes the
 installation.
-'''
+```
 sudo reboot
-'''
+```
 if use aws instance, you can get into the aws instance detail to reboot
 ![image](https://user-images.githubusercontent.com/35073431/213283492-7cd67a28-6b5b-4047-8b6e-b7b48e093eda.png)
 
 4. Retrieve the access token for the K3s cluster when the system is up and running.
-'''
+```
 node1 ~$ sudo cat /var/lib/rancher/k3s/server/node-token
-'''
+```
 you can see the token, copy it out for following operation
 ![image](https://user-images.githubusercontent.com/35073431/213283050-8879249f-819c-407d-b87f-bfdbf608a278.png)
 
 
 5. On the other two nodes (e.g., node2 and node3), clean up the previous installation of K3s, if any.
-'''
+```
 node2 ~$ sudo /usr/local/bin/k3s-uninstall.sh
 node2 ~$ sudo reboot
-'''
+```
 - tip:
 - make sure nodes can connect,you can edit the security group: create all traffic indound rule
 ![image](https://user-images.githubusercontent.com/35073431/213319826-5e25bfb2-5915-4515-9988-1f9090d48cea.png)
@@ -92,7 +92,7 @@ node2 ~$ sudo reboot
 6. Add NODE_TOKEN and FIRST_SERVER in the script to include the two nodes into the cluster with the first node. Install K3s on the
 other node.
 
-'''
+```
 node2 ~$ export INSTALL_K3S_EXEC="server --no-deploy traefik"
 node2 ~$ export FIRST_SERVER_IP="10.76.85.101". export FIRST_SERVER_IP="172.31.23.125"
 node2 ~$ export NODE_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx::server:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -102,7 +102,7 @@ node2 ~$ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3s_VERSION} K3S_U
  K3S_TOKEN=${NODE_TOKEN} \
  K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC=${INSTALL_K3S_EXEC} \
  sh -
- '''
+```
  ![image](https://user-images.githubusercontent.com/35073431/213310160-103fefc7-15a7-4113-afd6-2a790b72a8b9.png)
 
 
